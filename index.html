@@ -1,167 +1,108 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Giặt Sấy</title>
-
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Giặt Sấy Pro</title>
+  <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
+  <aside class="sidebar">
+    <div class="brand">🧺 <span>Giặt Sấy Pro</span></div>
+    <button class="nav active" data-page="dashboard">📊 Tổng quan</button>
+    <button class="nav" data-page="orders">🧾 Đơn hàng</button>
+    <button class="nav" data-page="customers">👥 Khách hàng</button>
+    <button class="nav" data-page="services">🏷️ Bảng giá</button>
+    <button class="nav" data-page="reports">📈 Báo cáo</button>
+    <div class="sidebar-bottom">
+      <label>Cửa hàng</label>
+      <select id="storeSelect"></select>
+    </div>
+  </aside>
 
-    <header class="header">
-        <div class="logo">
-            🧺 Giặt Sấy
-        </div>
-
-        <nav>
-            <a href="#home">Trang chủ</a>
-            <a href="#booking">Đặt đơn</a>
-            <a href="#services">Dịch vụ</a>
-        </nav>
+  <main class="main">
+    <header class="topbar">
+      <div>
+        <h1 id="pageTitle">Tổng quan</h1>
+        <p id="todayText"></p>
+      </div>
+      <button class="primary" id="newOrderBtn">＋ Tạo đơn mới</button>
     </header>
 
+    <section id="dashboard" class="page active">
+      <div class="cards">
+        <div class="stat"><span>Doanh thu hôm nay</span><strong id="todayRevenue">0 ₫</strong><small id="todayOrders">0 đơn</small></div>
+        <div class="stat"><span>Đơn đang xử lý</span><strong id="processingOrders">0</strong><small>Chưa hoàn tất</small></div>
+        <div class="stat"><span>Chờ giao khách</span><strong id="readyOrders">0</strong><small>Đã hoàn thành</small></div>
+        <div class="stat"><span>Khách hàng</span><strong id="customerCount">0</strong><small>Trong cửa hàng</small></div>
+      </div>
+      <div class="panel">
+        <div class="panel-head"><h2>Đơn hàng gần đây</h2><button class="link-btn" data-page-link="orders">Xem tất cả</button></div>
+        <div class="table-wrap"><table><thead><tr><th>Mã đơn</th><th>Khách hàng</th><th>Dịch vụ</th><th>Tổng tiền</th><th>Trạng thái</th></tr></thead><tbody id="recentOrders"></tbody></table></div>
+      </div>
+    </section>
 
-    <main>
+    <section id="orders" class="page">
+      <div class="toolbar">
+        <input id="orderSearch" placeholder="🔎 Tìm mã đơn, tên hoặc SĐT...">
+        <select id="statusFilter"><option value="">Tất cả trạng thái</option><option>Đã nhận</option><option>Đang giặt</option><option>Đang sấy</option><option>Hoàn thành</option><option>Đã trả</option></select>
+        <button class="primary" id="newOrderBtn2">＋ Tạo đơn</button>
+      </div>
+      <div class="panel"><div class="table-wrap"><table><thead><tr><th>Mã</th><th>Ngày</th><th>Khách hàng</th><th>Dịch vụ</th><th>SL/Kg</th><th>Tổng</th><th>Thanh toán</th><th>Trạng thái</th></tr></thead><tbody id="ordersTable"></tbody></table></div></div>
+    </section>
 
-        <!-- TRANG CHỦ -->
-        <section id="home" class="hero">
+    <section id="customers" class="page">
+      <div class="toolbar"><input id="customerSearch" placeholder="🔎 Tìm tên hoặc số điện thoại..."><button class="primary" id="addCustomerBtn">＋ Thêm khách</button></div>
+      <div class="panel"><div class="table-wrap"><table><thead><tr><th>Khách hàng</th><th>SĐT</th><th>Địa chỉ</th><th>Số đơn</th><th>Doanh số</th></tr></thead><tbody id="customersTable"></tbody></table></div></div>
+    </section>
 
-            <div class="hero-content">
+    <section id="services" class="page">
+      <div class="toolbar"><div><h2>Bảng giá dịch vụ</h2><p class="muted">Bạn có thể chỉnh giá trực tiếp để dùng cho cửa hàng.</p></div><button class="primary" id="addServiceBtn">＋ Thêm dịch vụ</button></div>
+      <div class="panel"><div class="table-wrap"><table><thead><tr><th>Dịch vụ</th><th>Đơn vị</th><th>Đơn giá</th><th></th></tr></thead><tbody id="servicesTable"></tbody></table></div></div>
+    </section>
 
-                <h1>
-                    Giặt sạch<br>
-                    <span>Sấy nhanh</span>
-                </h1>
+    <section id="reports" class="page">
+      <div class="cards">
+        <div class="stat"><span>Doanh thu tháng</span><strong id="monthRevenue">0 ₫</strong><small id="monthOrders">0 đơn</small></div>
+        <div class="stat"><span>Giá trị đơn TB</span><strong id="avgOrder">0 ₫</strong><small>Trong tháng</small></div>
+      </div>
+      <div class="panel"><div class="panel-head"><h2>Doanh thu theo ngày</h2></div><div id="reportBars" class="bars"></div></div>
+    </section>
+  </main>
 
-                <p>
-                    Dịch vụ giặt sấy tiện lợi, nhanh chóng
-                    và sạch sẽ.
-                </p>
+  <div class="modal" id="orderModal">
+    <div class="modal-card">
+      <div class="modal-head"><h2>Tạo đơn giặt sấy</h2><button class="close" data-close>×</button></div>
+      <form id="orderForm">
+        <div class="grid2">
+          <div><label>Họ tên khách</label><input id="customerName" required></div>
+          <div><label>Số điện thoại</label><input id="customerPhone" required></div>
+        </div>
+        <div class="grid2">
+          <div><label>Địa chỉ</label><input id="customerAddress"></div>
+          <div><label>Dịch vụ</label><select id="serviceInput" required></select></div>
+        </div>
+        <div class="grid3">
+          <div><label>Số kg / đơn vị</label><input id="qtyInput" type="number" min="0.1" step="0.1" value="1" required></div>
+          <div><label>Đơn giá</label><input id="priceInput" type="number" min="0" required></div>
+          <div><label>Giảm giá</label><input id="discountInput" type="number" min="0" value="0"></div>
+        </div>
+        <div class="grid2">
+          <div><label>Thanh toán</label><select id="paymentInput"><option>Chưa thanh toán</option><option>Tiền mặt</option><option>Chuyển khoản</option></select></div>
+          <div><label>Ghi chú</label><input id="noteInput" placeholder="Ví dụ: đồ trắng, dễ phai..."></div>
+        </div>
+        <div class="total-box">Tổng tiền: <strong id="totalPreview">0 ₫</strong></div>
+        <button class="primary full" type="submit">Lưu đơn hàng</button>
+      </form>
+    </div>
+  </div>
 
-                <a href="#booking" class="button">
-                    Đặt đơn ngay
-                </a>
-
-            </div>
-
-            <div class="hero-icon">
-                🧺
-            </div>
-
-        </section>
-
-
-        <!-- DỊCH VỤ -->
-        <section id="services" class="services">
-
-            <h2>Dịch vụ của chúng tôi</h2>
-
-            <div class="service-list">
-
-                <div class="service-card">
-                    <div class="service-icon">👕</div>
-                    <h3>Giặt thường</h3>
-                    <p>Giặt sạch quần áo hằng ngày.</p>
-                </div>
-
-                <div class="service-card">
-                    <div class="service-icon">🌀</div>
-                    <h3>Giặt + Sấy</h3>
-                    <p>Giặt sạch và sấy khô nhanh chóng.</p>
-                </div>
-
-                <div class="service-card">
-                    <div class="service-icon">🛏️</div>
-                    <h3>Chăn / Ga / Gối</h3>
-                    <p>Vệ sinh chăn ga gối sạch sẽ.</p>
-                </div>
-
-            </div>
-
-        </section>
-
-
-        <!-- ĐẶT ĐƠN -->
-        <section id="booking" class="booking">
-
-            <h2>Đặt đơn giặt sấy</h2>
-
-            <form id="bookingForm">
-
-                <label>Họ và tên</label>
-                <input
-                    type="text"
-                    id="name"
-                    placeholder="Nhập họ tên"
-                    required
-                >
-
-                <label>Số điện thoại</label>
-                <input
-                    type="tel"
-                    id="phone"
-                    placeholder="Nhập số điện thoại"
-                    required
-                >
-
-                <label>Địa chỉ</label>
-                <input
-                    type="text"
-                    id="address"
-                    placeholder="Nhập địa chỉ nhận đồ"
-                    required
-                >
-
-                <label>Loại dịch vụ</label>
-
-                <select id="service" required>
-                    <option value="">-- Chọn dịch vụ --</option>
-                    <option value="Giặt thường">Giặt thường</option>
-                    <option value="Giặt + Sấy">Giặt + Sấy</option>
-                    <option value="Chăn / Ga / Gối">
-                        Chăn / Ga / Gối
-                    </option>
-                </select>
-
-                <label>Số kg</label>
-
-                <input
-                    type="number"
-                    id="weight"
-                    min="1"
-                    placeholder="Ví dụ: 5"
-                    required
-                >
-
-                <label>Ghi chú</label>
-
-                <textarea
-                    id="note"
-                    placeholder="Ghi chú thêm..."
-                ></textarea>
-
-                <button type="submit" class="button">
-                    Xác nhận đặt đơn
-                </button>
-
-            </form>
-
-            <div id="result" class="result"></div>
-
-        </section>
-
-    </main>
-
-
-    <footer>
-        <p>© 2026 Giặt Sấy</p>
-    </footer>
-
-
-    <script src="app.js"></script>
-
+  <div class="modal" id="simpleModal">
+    <div class="modal-card small">
+      <div class="modal-head"><h2 id="simpleTitle">Thêm</h2><button class="close" data-close>×</button></div>
+      <form id="simpleForm"></form>
+    </div>
+  </div>
+  <script src="app.js"></script>
 </body>
 </html>
